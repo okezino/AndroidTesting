@@ -1,12 +1,13 @@
 package com.example.testingtutorial.di
 
-import android.app.Application
+
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.example.testingtutorial.model.ShoppingDao
 import com.example.testingtutorial.model.ShoppingItemDB
 import com.example.testingtutorial.remote.PixableApi
+import com.example.testingtutorial.repository.DefaultRepository
+import com.example.testingtutorial.repository.ShoppingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,8 +25,16 @@ object AppModule {
     @Singleton
     @Provides
     fun provideShoppingRoomDataBase(@ApplicationContext context: Context) : ShoppingItemDB{
-    return  Room.databaseBuilder(context, ShoppingItemDB::class.java, "SHOPPING_DB").build()
+        return  Room.databaseBuilder(context, ShoppingItemDB::class.java, "SHOPPING_DB").build()
     }
+
+
+
+    @Singleton
+    @Provides
+    fun provideDefaultRepository(
+        dao : ShoppingDao, api :PixableApi
+    )  = DefaultRepository(dao , api) as ShoppingRepository
 
     @Singleton
     @Provides
